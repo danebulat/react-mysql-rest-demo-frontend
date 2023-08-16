@@ -9,19 +9,51 @@ body {
   padding: 0;
 }
 
-/* HEADER */
+/* -------------------------------------------------- */
+/* Header                                             */
+/* -------------------------------------------------- */
+
 header {
   display: flex;
   flex-direction: row;
   align-items: center;
   column-gap: 10px;
-
-  margin: 40px 0 80px;
+  margin: 40px 0;
 }
-header h1 {
+header .title-cont {
   flex: 1;
   text-align: left;
 }
+header .title-cont > span {
+  display: inline-block;
+  margin-top: 6px;
+  color: #ccc;
+  font-size: 14px;
+}
+.info-section {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-bottom: 40px;
+  padding: 20px 0px;
+  border-bottom: 1px solid #5e5e5e;
+  border-top: 1px solid #5e5e5e;
+}
+.info-section h2 {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.info-section p {
+  font-size: 14px;
+  color: #bfbfbf;
+  line-height: 20px;
+}
+.info-section span:first-of-type { margin: 0 4px 0 0; }
+.info-section span:last-of-type  { margin: 0 0 0 8px; }
+.info-section a       { text-decoration: underline; color: inherit; }
+.info-section a:hover { text-decoration: underline; color: #eee; }
 
 /* -------------------------------------------------- */
 /* Animations                                         */
@@ -182,6 +214,47 @@ header h1 {
   color: inherit;
 }
 
+.delete-btn-cont {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delete-confirm-box {
+  position: absolute;
+  bottom: 42px;
+}
+.delete-confirm-box__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: white;
+  background-color: #205ed3;
+  padding: 12px 24px;
+  min-width: 100px;
+  border-radius: 4px;
+}
+.delete-confirm-box__options {
+  margin-top: 10px;
+  display: flex;
+  column-gap: 10px;
+  font-size: 13px;
+}
+.confirm-no-box,
+.confirm-yes-box {
+  background-color: white;
+  padding: 6px 16px;
+  color: darkred;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+.confirm-no-box  { color: darkred; }
+.confirm-yes-box { color: darkgreen; }
+
 /* -------------------------------------------------- */
 /* Cards                                              */
 /* -------------------------------------------------- */
@@ -203,6 +276,12 @@ header h1 {
 
   border: 1px solid #5e5e5e;
   border-radius: 10px;
+
+  box-shadow: 0px 0px 10px hsl(220, 30%, 30%);
+  transition: box-shadow .3s;
+}
+.card-line:hover {
+  box-shadow: 0px 0px 20px hsl(220, 30%, 60%);
 }
 .card-line__header {
   display: flex;

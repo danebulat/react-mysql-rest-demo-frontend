@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { ReactComponent as Heart } from '../assets/heart.svg';
-import { ReactComponent as RightArrowRed } from '../assets/right-arrow-red.svg';
 import { ReactComponent as RightArrowBlue } from '../assets/right-arrow-blue.svg';
 import Add from './Add';
 import Update from './Update';
 import { disableScrollbar, formatPrice } from '../helper';
 import { serverUri } from '../config/server';
+import DeleteButton from '../components/DeleteButton';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -14,8 +14,12 @@ const Books = () => {
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [bookForUpdate, setBookForUpdate] = useState(false);
+  const bookLimit = 100;
 
-  /* LOAD ALL BOOKS */
+  /* ---------------------------------------- */
+  /* Load books                               */
+  /* ---------------------------------------- */
+
   useEffect(() => {
     const fetchAllBooks = async () => {
       try {
@@ -30,28 +34,24 @@ const Books = () => {
     fetchAllBooks();
   }, []);
 
-  /* HANDLER: SHOW ADD MODAL */
+  /* ---------------------------------------- */
+  /* Handlers                                 */
+  /* ---------------------------------------- */
+
   const handleShowAddModal = () => {
     disableScrollbar();
     setShowAddModal(true);
   };
 
-  /* HANDLER: SHOW UPDATE MODAL */
   const handleShowUpdateModal = (book) => {
     disableScrollbar();
     setShowUpdateModal(true);
     setBookForUpdate(book);
   };
   
-  /* HANDLER: DELETE BOOK */
-  const handleDelete = async (bookToDelete) => {
-    try {
-      await axios.delete(`${serverUri}/books/${bookToDelete.id}`);
-      setBooks(prev => prev.filter(other => other.id !== bookToDelete.id));
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  /* ---------------------------------------- */
+  /* JSX                                      */
+  /* ---------------------------------------- */
 
   return (
     <div>
@@ -64,13 +64,44 @@ const Books = () => {
                 bookForUpdate={bookForUpdate}/>}
 
       <header>
-        <h1>Book Shop</h1>
+        <div className="title-cont">
+          <h1>Book Shop</h1>
+          <span>{books.length} / {bookLimit} books added</span>
+        </div>
         <div className="button-cont">
           <button className="btn btn-blue" onClick={handleShowAddModal}>
             Add New Book
           </button>
         </div>
       </header>
+
+      <section className="info-section">
+        <div>
+          <h2>Description</h2>
+          <p>
+            A sample web application built with <b>React</b>, <b>Node.js</b> and <b>MySQL</b>.
+            Use the interface to create, update and delete book records from the
+            backend database.
+          </p>
+        </div>
+        <div>
+          <h2>Source Code</h2>
+          <p>
+            <span>
+              <a href="#" 
+                 target="_blank">
+                  Frontend
+              </a>
+            </span> &#183; 
+            <span>
+              <a href="https://github.com/danebulat/react-mysql-rest-demo-backend" 
+                 target="_blank">
+                  Backend
+              </a>
+            </span>
+          </p>
+        </div>
+      </section>
 
       {books.length === 0 && 
         <h2>No books added yet...</h2>}
@@ -89,17 +120,13 @@ const Books = () => {
               </div>
               <div className="card-line__footer">
 
-              <button className="btn-sm btn-sm-red" 
-                onClick={() => handleDelete(book)}>
-                Delete
-                <RightArrowRed className="icon-sm" />
-              </button>
+                <DeleteButton book={book} setBooks={setBooks} />
 
-              <button className="btn-sm btn-sm-blue" 
-                onClick={() => handleShowUpdateModal(book)}>
-                Update
-                <RightArrowBlue className="icon-sm" />
-              </button>
+                <button className="btn-sm btn-sm-blue" 
+                  onClick={() => handleShowUpdateModal(book)}>
+                  Update
+                  <RightArrowBlue className="icon-sm" />
+                </button>
               </div>
             </div>
           )}
