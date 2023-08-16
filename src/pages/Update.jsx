@@ -8,7 +8,10 @@ const Update = ({ setShowUpdateModal, setBooks, bookForUpdate }) => {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [errorText, setErrorText] = useState([]);
 
-  /* FADE OUT */
+  /* ---------------------------------------- */
+  /* Handlers                                 */
+  /* ---------------------------------------- */
+
   function handleFadeOut() {
     setIsFadingOut(true);
     setTimeout(() => {
@@ -17,18 +20,15 @@ const Update = ({ setShowUpdateModal, setBooks, bookForUpdate }) => {
     }, 300)
   }
   
-  /* HANDLER: CLOSE MODAL */
   function handleClose() {
     enableScrollbar();
     handleFadeOut();
   }
 
-  /* FORM INPUT CHANGE */
   const handleChange = e => {
     setBook(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  /* HANDLER: UPDATE BOOK */
   const handleClick = async e => {
     e.preventDefault();
     setErrorText([]);

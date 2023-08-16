@@ -56,8 +56,7 @@ const Books = () => {
   return (
     <div>
       {showAddModal && 
-        <Add setShowAddModal={setShowAddModal} setBooks={setBooks}
-             showAddModal={showAddModal}/>}
+        <Add setShowAddModal={setShowAddModal} setBooks={setBooks} />}
       
       {showUpdateModal && 
         <Update setShowUpdateModal={setShowUpdateModal} setBooks={setBooks}
@@ -88,7 +87,7 @@ const Books = () => {
           <h2>Source Code</h2>
           <p>
             <span>
-              <a href="#" 
+              <a href="https://github.com/danebulat/react-mysql-rest-demo-frontend" 
                  target="_blank">
                   Frontend
               </a>
@@ -108,8 +107,8 @@ const Books = () => {
       
       {books.length > 0 &&
         <div className="card-grid">
-          {books.map(book => 
-            <div className="card-line" key={book.id}>
+          {books.map((book, index) => 
+            <div className="card-line" key={`book.id-${index}`}>
               <div className="card-line__header">
                 <h4>{book.title}</h4>
                 <p><Heart className="icon-sm"/> <span>4.8</span></p>
@@ -137,4 +136,3 @@ const Books = () => {
 };
 
 export default Books;
-

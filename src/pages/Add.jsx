@@ -3,7 +3,8 @@ import axios from 'axios';
 import { enableScrollbar, bookIsValid } from '../helper';
 import { serverUri } from '../config/server';
 
-const Add = ({ setShowAddModal, setBooks, showAddModal }) => {
+const Add = ({ setShowAddModal, setBooks }) => {
+
   const [book, setBook] = useState({
     title: "",
     desc: "",
@@ -13,21 +14,10 @@ const Add = ({ setShowAddModal, setBooks, showAddModal }) => {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [errorText, setErrorText] = useState([]);
 
-  /* FADE OUT */
-  function handleFadeOut() {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      setShowAddModal(false);
-      setIsFadingOut(false);
-    }, 300)
-  }
+  /* ---------------------------------------- */
+  /* Unused                                   */
+  /* ---------------------------------------- */
 
-  /* FORM INPUT CHANGE */
-  const handleChange = e => {
-    setBook(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  /* HANDLER: CLOSE MODAL */
   const clickModalOuter = e => {
     
     // Check event target is in modal
@@ -41,13 +31,27 @@ const Add = ({ setShowAddModal, setBooks, showAddModal }) => {
     handleFadeOut();
   };
 
-  /* HANDLER: CLOSE MODAL */
+  /* ---------------------------------------- */
+  /* Handlers                                 */
+  /* ---------------------------------------- */
+
+  function handleFadeOut() {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setShowAddModal(false);
+      setIsFadingOut(false);
+    }, 300)
+  }
+
+  const handleChange = e => {
+    setBook(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   function handleClose() {
     enableScrollbar();
     handleFadeOut();
   }
   
-  /* HANDLER: ADD BOOK */
   const handleClick = async e => {
     e.preventDefault();
     setErrorText([]);
