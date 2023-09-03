@@ -1,11 +1,7 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from 'react-router-dom';
-import Books        from './pages/Books';
-import NotFound     from './pages/NotFound';
-import { basename } from './config/server';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Books }        from './pages/Books';
+import { NotFoundPage } from './pages/NotFound';
+import { basename }     from './config/server';
 import './style.css';
 
 function App() {
@@ -15,7 +11,7 @@ function App() {
       <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<Books />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </div>

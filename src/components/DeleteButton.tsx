@@ -2,15 +2,16 @@ import { useState } from "react";
 import { ReactComponent as RightArrowRed } from '../assets/right-arrow-red.svg';
 import axios from 'axios';
 import { serverUri } from "../config/server";
+import { DeleteButtonProps, Book } from "../types/types";
 
-function DeleteButton({ book, setBooks}) {
+export function DeleteButton({ book, setBooks}: DeleteButtonProps) {
   const [show, setShow] = useState(false);
 
   /* ---------------------------------------- */
   /* Handlers                                 */
   /* ---------------------------------------- */
 
-  const handleDelete = async (bookToDelete) => {
+  const handleDelete = async (bookToDelete: Book) => {
     try {
       await axios.delete(`${serverUri}/books/${bookToDelete.id}`);
       setBooks(prev => prev.filter(other => other.id !== bookToDelete.id));

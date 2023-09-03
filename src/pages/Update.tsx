@@ -2,34 +2,13 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import { enableScrollbar, bookIsValid } from '../helper';
 import { serverUri } from '../config/server';
+import { UpdateProps, Book } from '../types/types';
 
-const Add = ({ setShowAddModal, setBooks }) => {
+export function Update({ setShowUpdateModal, setBooks, bookForUpdate }: UpdateProps) {
 
-  const [book, setBook] = useState({
-    title: "",
-    desc: "",
-    price: null,
-    cover: "",
-  });
+  const [book, setBook] = useState<Book>({ ...bookForUpdate });
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [errorText, setErrorText] = useState([]);
-
-  /* ---------------------------------------- */
-  /* Unused                                   */
-  /* ---------------------------------------- */
-
-  const clickModalOuter = e => {
-    
-    // Check event target is in modal
-    const modalOuterElem = document.querySelector('.modal-outer');
-    const clickedOuterElem = e.target === modalOuterElem;
-
-    if (modalOuterElem.contains(e.target) && !clickedOuterElem)
-      return;
-
-    enableScrollbar();
-    handleFadeOut();
-  };
+  const [errorText, setErrorText] = useState<string[]>([]);
 
   /* ---------------------------------------- */
   /* Handlers                                 */
@@ -38,21 +17,21 @@ const Add = ({ setShowAddModal, setBooks }) => {
   function handleFadeOut() {
     setIsFadingOut(true);
     setTimeout(() => {
-      setShowAddModal(false);
+      setShowUpdateModal(false);
       setIsFadingOut(false);
     }, 300)
   }
-
-  const handleChange = e => {
-    setBook(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
+  
   function handleClose() {
     enableScrollbar();
     handleFadeOut();
   }
-  
-  const handleClick = async e => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBook((prev: Book) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setErrorText([]);
 
@@ -63,24 +42,27 @@ const Add = ({ setShowAddModal, setBooks }) => {
     }
 
     try {
-      const res = await axios.post(`${serverUri}/books`, book);
+      const res = await axios.put(`${serverUri}/books/${book.id}`, book);
 
       // show any errors and return
       if (res.data.errors) {
-        res.data.errors.forEach(err =>
+        res.data.errors.forEach((err: {msg: string}) =>
           setErrorText(prev => [...prev, err.msg])
         );
 
         return;
       }
 
-      // add book and close modal
-      const newBook = res.data[0];
-      setBooks(prev => [...prev, newBook]);
+      // update the front-end book array
+      setBooks((prev: Book[]) =>
+        prev.map(other => {
+          return other.id === book.id ? book : other;
+        })
+      ); 
 
       enableScrollbar();
-      setShowAddModal(false);
-    } catch (err) { 
+      handleFadeOut();
+    } catch (err) {
       console.error(err); // TODO: Put error in state and show on page
     }
   };
@@ -92,13 +74,13 @@ const Add = ({ setShowAddModal, setBooks }) => {
 
         <div className="modal">
           <div className="form">
-            <h1>Add New Book</h1>
+            <h1>Update Book</h1>
 
-           {errorText.length > 0 && (
-             <ul className="form-errors">
-               {errorText.map(err => <li key={err}>{err}</li>)}
-             </ul>
-           )}
+            {errorText.length > 0 && (
+              <ul className="form-errors">
+                {errorText.map(err => <li key={err}>{err}</li>)}
+              </ul>
+            )}
 
             <div>
               <label>Title: <span className="required">*</span></label>
@@ -106,7 +88,8 @@ const Add = ({ setShowAddModal, setBooks }) => {
                 type="text" 
                 placeholder="title" 
                 onChange={handleChange} 
-                name="title" />
+                name="title"
+                value={book.title} />
             </div>
             
             <div>
@@ -115,7 +98,8 @@ const Add = ({ setShowAddModal, setBooks }) => {
                 type="text" 
                 placeholder="desc" 
                 onChange={handleChange} 
-                name="desc" />
+                name="desc"
+                value={book.desc} />
             </div>
             
             <div>
@@ -124,7 +108,8 @@ const Add = ({ setShowAddModal, setBooks }) => {
                 type="number" 
                 placeholder="price" 
                 onChange={handleChange} 
-                name="price" />
+                name="price"
+                value={book.price} />
             </div>
             
             <div>
@@ -133,15 +118,15 @@ const Add = ({ setShowAddModal, setBooks }) => {
                 type="text" 
                 placeholder="cover" 
                 onChange={handleChange} 
-                name="cover" />
+                name="cover"
+                value={book.cover} />
             </div>
-
             <div>
               <button className="btn formButton" onClick={handleClose}>
                 Close 
               </button>
               <button className="btn btn-blue formButton" onClick={handleClick}>
-                Add
+                Update
               </button>
             </div>
           </div>
@@ -151,4 +136,4 @@ const Add = ({ setShowAddModal, setBooks }) => {
   );
 };
 
-export default Add;
+export default Update;

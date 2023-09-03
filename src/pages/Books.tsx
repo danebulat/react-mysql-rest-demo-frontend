@@ -1,19 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import { ReactComponent as Heart } from '../assets/heart.svg';
-import { ReactComponent as RightArrowBlue } from '../assets/right-arrow-blue.svg';
-import Add from './Add';
-import Update from './Update';
-import { disableScrollbar, formatPrice } from '../helper';
-import { serverUri } from '../config/server';
-import DeleteButton from '../components/DeleteButton';
+import {useEffect, useState} from 'react';
+import axios            from 'axios';
+import { Add }          from './Add';
+import { Update }       from './Update';
+import { DeleteButton } from '../components/DeleteButton';
+import { Book }         from '../types/types';
+import { serverUri }    from '../config/server';
 
-const Books = () => {
-  const [books, setBooks] = useState([]);
+import { disableScrollbar, formatPrice }    from '../helper';
+import { ReactComponent as Heart }          from '../assets/heart.svg';
+import { ReactComponent as RightArrowBlue } from '../assets/right-arrow-blue.svg';
+
+export function Books() {
+  const [books, setBooks] = useState<Book[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [bookForUpdate, setBookForUpdate] = useState(false);
+  const [bookForUpdate, setBookForUpdate] = useState<Book | null>(null);
   const bookLimit = 100;
 
   /* ---------------------------------------- */
@@ -43,7 +45,7 @@ const Books = () => {
     setShowAddModal(true);
   };
 
-  const handleShowUpdateModal = (book) => {
+  const handleShowUpdateModal = (book: Book) => {
     disableScrollbar();
     setShowUpdateModal(true);
     setBookForUpdate(book);
@@ -60,7 +62,7 @@ const Books = () => {
       
       {showUpdateModal && 
         <Update setShowUpdateModal={setShowUpdateModal} setBooks={setBooks}
-                bookForUpdate={bookForUpdate}/>}
+                bookForUpdate={bookForUpdate!}/>}
 
       <header>
         <div className="title-cont">
@@ -118,7 +120,6 @@ const Books = () => {
                 <p><strong>${formatPrice(book.price)}</strong></p>
               </div>
               <div className="card-line__footer">
-
                 <DeleteButton book={book} setBooks={setBooks} />
 
                 <button className="btn-sm btn-sm-blue" 

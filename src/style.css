@@ -130,8 +130,8 @@ header .title-cont > span {
   justify-items: center;
 }
 .modal {
+  width: 70%;
   max-width: 700px;
-  min-width: 70%;
   margin: 0 auto;
   padding: 40px;
 

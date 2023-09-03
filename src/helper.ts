@@ -1,4 +1,6 @@
-function bookIsValid(b) {
+import { Book } from "./types/types";
+
+function bookIsValid(b: Book) {
   if (!b.title || !b.desc || !b.price) {
     return false;
   }
@@ -13,7 +15,7 @@ function disableScrollbar() {
   document.body.style.overflow = "hidden";
 }
 
-function formatPrice(price) {
+function formatPrice(price: number) {
   return parseFloat(String(price / 100)).toFixed(2);
 }
 
